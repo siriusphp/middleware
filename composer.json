@@ -1,0 +1,42 @@
+{
+    "name": "siriusphp/middleware",
+    "description": "Lightweight middleware implementation. 1 class, ",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "http",
+        "middleware",
+        "psr",
+        "psr-7",
+        "request",
+        "response",
+        "zend-diactoros"
+    ],
+    "homepage": "https://github.com/sirius/middleware",
+    "support": {
+        "issues": "https://github.com/sirius/middleware/issues",
+        "source": "https://github.com/sirius/middleware"
+    },
+    "authors": [
+        {
+            "name": "Adrian Miu",
+            "email": "adrian@adrianmiu.ro"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "psr/http-message": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8",
+        "zendframework/zend-diactoros": "^1.3"
+    },
+    "suggest": {
+        "zendframework/zend-diactoros": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sirius\\Middleware\\": "src/"
+        }
+    }
+}
