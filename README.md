@@ -25,7 +25,7 @@ $middlewares[] = function(RequestInterface $request, ResponseInterface $response
     return $response;
 };
 
-$runner = Sirius\Middleware\Runner($middlewares);
+$runner = Sirius\Middleware\Runner::factory($middlewares);
 
 $response = $runner(Zend\Diactoros\ServerRequestFactory::fromGlobals(), new Zend\Diactoros\Response);
 
@@ -83,7 +83,7 @@ $middlewares[] = function(RequestInterface $request, callable $next = null) {
     return $response;
 };
 
-$runner = Sirius\Middleware\FrameRunner($middlewares);
+$runner = Sirius\Middleware\FrameRunner::factory($middlewares);
 
 $response = $runner(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 
