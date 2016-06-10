@@ -21,15 +21,15 @@ class FrameRunner {
      * Creates a runner based on an array of middleware
      *
      * @param array $middlewares
-     * @return Runner
+     * @return FrameRunner
      */
     static public function factory(array $middlewares = array())
     {
-        $base = null;
+        $runner = null;
         foreach ($middlewares as $middleware) {
-            $base = $base ? $base->add($middleware) : new static($middleware);
+            $runner = $runner ? $runner->add($middleware) : new static($middleware);
         }
-        return $base;
+        return $runner;
     }
 
     public function __construct(callable $middleware)
@@ -37,19 +37,15 @@ class FrameRunner {
         $this->middleware = $middleware;
     }
 
-    public function setNext(FrameRunner $runner)
-    {
-        $this->next = $runner;
-    }
-
     /**
+     * Returns a new FrameRunner
      * @param callable $middleware
-     * @return callable
+     * @return FrameRunner
      */
     public function add(callable $middleware)
     {
         $runner = new static($middleware);
-        $runner->setNext($this);
+        $runner->next = $this;
 
         return $runner;
     }

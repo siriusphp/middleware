@@ -20,11 +20,11 @@ class Runner {
      */
     static public function factory(array $middlewares = array())
     {
-        $base = new static;
+        $runner = new static;
         foreach ($middlewares as $middleware) {
-            $base = $base->add($middleware);
+            $runner = $runner->add($middleware);
         }
-        return $base;
+        return $runner;
     }
 
     public function __construct(callable $middleware = null)
@@ -32,19 +32,16 @@ class Runner {
         $this->middleware = $middleware;
     }
 
-    public function setNext(Runner $runner)
-    {
-        $this->next = $runner;
-    }
-
     /**
+     * Returns a new instance of a runner (ie: immutable middleware runner)
+     *
      * @param callable $middleware
-     * @return callable
+     * @return Runner
      */
     public function add(callable $middleware)
     {
         $runner = new static($middleware);
-        $runner->setNext($this);
+        $runner->next = $this;
 
         return $runner;
     }

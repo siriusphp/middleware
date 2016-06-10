@@ -31,6 +31,34 @@ $response = $runner(Zend\Diactoros\ServerRequestFactory::fromGlobals(), new Zend
 
 ```
 
+The middleware runners are immutable so adding a new middleware returns a new runner. If you want to create the runner by hand 
+
+```php
+
+// this is WRONG!!!!!!!!!
+$runner = new Sirius\Middleware\Runner;
+$runner->add(function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+    // do your thing
+    return $response;
+});
+$runner->add(function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+    // do your thing
+    return $response;
+});
+
+
+// this is CORRECT
+$runner =  (new Sirius\Middleware\Runner)
+            ->add(function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+              // do your thing
+              return $response;
+            })
+            ->add(function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+              // do your thing
+              return $response;
+            });
+
+```
 
 ## Frame middleware
 
