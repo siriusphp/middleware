@@ -2,8 +2,7 @@
 
 namespace Sirius\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 
@@ -13,7 +12,7 @@ class FrameRunnerTest extends \PHPUnit_Framework_TestCase
     /* @var FrameRunner */
     protected $runner;
 
-    /* @var RequestInterface */
+    /* @var ServerRequestInterface */
     protected $request;
 
     protected $middleware_a;
@@ -21,7 +20,7 @@ class FrameRunnerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->runner = new FrameRunner(function(RequestInterface $request) {
+        $this->runner = new FrameRunner(function(ServerRequestInterface $request) {
             $response = new Response();
             $response->getBody()->write('start');
             return $response;
@@ -29,11 +28,11 @@ class FrameRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->request = new ServerRequest();
 
-        $this->middleware_a = function(RequestInterface $request, callable $next = null) {
+        $this->middleware_a = function(ServerRequestInterface $request, callable $next) {
             return $next($request->withAttribute('dodge', 'wow! such win!'));
         };
 
-        $this->middleware_b = function(RequestInterface $request, callable $next = null) {
+        $this->middleware_b = function(ServerRequestInterface $request, callable $next) {
             /* @var $response Response */
             $response = $next($request);
             $response->getBody()->rewind();
@@ -67,8 +66,20 @@ class FrameRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Exception');
 
-        $runner = $this->runner->add(function(RequestInterface $request, callable $next = null) {
+        $runner = $this->runner->add(function(ServerRequestInterface $request, callable $next) {
             return '5';
+        });
+
+        $runner($this->request);
+    }
+
+    public function test_exception_thrown_when_first_middleware_calls_next()
+    {
+
+        $this->setExpectedException('Exception');
+
+        $runner = new FrameRunner(function(ServerRequestInterface $request, callable $next) {
+            return $next($request, function(){});
         });
 
         $runner($this->request);
@@ -77,7 +88,7 @@ class FrameRunnerTest extends \PHPUnit_Framework_TestCase
     public function test_the_factory_method()
     {
         $runner = FrameRunner::factory(array(
-            function(ServerRequest $request, callble $next = null) {
+            function(ServerRequestInterface $request) {
                return new Response();
             },
             $this->middleware_b,

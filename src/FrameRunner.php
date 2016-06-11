@@ -3,7 +3,7 @@
 namespace Sirius\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * FrameRunner Middleware inspired by this article
@@ -51,14 +51,18 @@ class FrameRunner {
     }
 
     /**
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function __invoke(RequestInterface $request)
+    public function __invoke(ServerRequestInterface $request)
     {
 
-        $response = call_user_func($this->middleware, $request, $this->next);
+        $next = $this->next ?: function(ServerRequestInterface $request) {
+            throw new \Exception('The first middleware in the stack calls next when it shouldn\'t');
+        };
+
+        $response = call_user_func($this->middleware, $request, $next);
 
         if (!$response instanceof ResponseInterface) {
             throw new \Exception('Middleware is not returning a Response object');

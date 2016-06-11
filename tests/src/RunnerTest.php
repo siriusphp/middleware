@@ -2,8 +2,8 @@
 
 namespace Sirius\Middleware;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\RequestInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 
@@ -13,7 +13,7 @@ class RunnerTest extends \PHPUnit_Framework_TestCase
     /* @var Runner */
     protected $runner;
 
-    /* @var RequestInterface */
+    /* @var ServerRequestInterface */
     protected $request;
 
     /* @var ResponseInterface */
@@ -30,11 +30,11 @@ class RunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->response = new Response();
 
-        $this->middleware_a = function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+        $this->middleware_a = function(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             return $next($request->withAttribute('dodge', 'wow! such win!'), $response);
         };
 
-        $this->middleware_b = function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+        $this->middleware_b = function(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             $response = $next($request, $response);
             $response->getBody()->write($request->getAttribute('dodge'));
             return $response;
@@ -63,7 +63,7 @@ class RunnerTest extends \PHPUnit_Framework_TestCase
 
     public function test_middleware_that_does_not_return_a_response()
     {
-        $runner = $this->runner->add(function(RequestInterface $request, ResponseInterface $response, callable $next = null) {
+        $runner = $this->runner->add(function(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             return '5';
         });
 
