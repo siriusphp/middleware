@@ -5,7 +5,8 @@ namespace Sirius\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Runner {
+class Runner
+{
 
     /* @var runner */
     protected $next;
@@ -18,7 +19,7 @@ class Runner {
      * @param array $middlewares
      * @return Runner
      */
-    static public function factory(array $middlewares = array())
+    public static function factory(array $middlewares = array())
     {
         $runner = new static;
         foreach ($middlewares as $middleware) {
@@ -64,5 +65,4 @@ class Runner {
 
         return $result;
     }
-
 }

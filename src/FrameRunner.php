@@ -9,8 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
  * FrameRunner Middleware inspired by this article
  * http://blog.ircmaxell.com/2016/05/all-about-middleware.html
  */
-
-class FrameRunner {
+class FrameRunner
+{
 
     /* @var runner */
     protected $next;
@@ -23,7 +23,7 @@ class FrameRunner {
      * @param array $middlewares
      * @return FrameRunner
      */
-    static public function factory(array $middlewares = array())
+    public static function factory(array $middlewares = array())
     {
         $runner = null;
         foreach ($middlewares as $middleware) {
@@ -58,7 +58,7 @@ class FrameRunner {
     public function __invoke(ServerRequestInterface $request)
     {
 
-        $next = $this->next ?: function(ServerRequestInterface $request) {
+        $next = $this->next ?: function (ServerRequestInterface $request) {
             throw new \Exception('The first middleware in the stack calls next when it shouldn\'t');
         };
 
@@ -70,5 +70,4 @@ class FrameRunner {
 
         return $response;
     }
-
 }
