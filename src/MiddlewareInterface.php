@@ -12,6 +12,7 @@ interface MiddlewareInterface {
      * @param ResponseInterface $response
      * @param callable $next
      * @return ResponseInterface|null
+     * @throws \Exception
      */
     public function __invoke(ServerRequestInterface $requestInterface, ResponseInterface $response, callable $next);
 }
