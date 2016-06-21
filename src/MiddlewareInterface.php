@@ -8,11 +8,11 @@ use Psr\Http\Message\ServerRequestInterface;
 interface MiddlewareInterface {
 
     /**
-     * @param ServerRequestInterface $requestInterface
+     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param callable $next
      * @return ResponseInterface|null
      * @throws \Exception
      */
-    public function __invoke(ServerRequestInterface $requestInterface, ResponseInterface $response, callable $next);
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next);
 }

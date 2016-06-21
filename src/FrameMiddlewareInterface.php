@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface;
 interface FrameMiddlewareInterface {
 
     /**
-     * @param ServerRequestInterface $requestInterface
+     * @param ServerRequestInterface $request
      * @param callable $next
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function __invoke(ServerRequestInterface $requestInterface, callable $next);
+    public function __invoke(ServerRequestInterface $request, callable $next);
 }
